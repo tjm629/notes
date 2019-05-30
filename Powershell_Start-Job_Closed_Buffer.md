@@ -29,7 +29,7 @@ But then I had a need to add additional actions to the ScriptBlock. I figured us
 ```posh
 $job = @{
     Name        = "Contoso_{0}_{1}" -f $Result.OuName, (Get-Date -Format "yyyyMMddhhmm")
-    Credential  = $Result.Credential
+    Credential = $Result.Credential
 ...
 ```
 
