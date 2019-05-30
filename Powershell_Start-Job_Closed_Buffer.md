@@ -37,7 +37,7 @@ That's when I started to get the above error (`Objects cannot be added to a clos
 
 One thing I've learned while implementing `-Credential` parameters into our corporate PowerShell modules is that the Microsoft-provided cmdlets handle credentials in an inconsitent manner. (h/t [@joshduffney](http://duffney.io/AddCredentialsToPowerShellFunctions)).
 
-`Start-Job` (at least in Powershell 4) doesn't seem to handle being passed an empty credential object (`[PsCredential]::Empty`) correctly. The fix for this error was to not pass `Start-Job` the empty credential object:
+`Start-Job` in Powershell 4 doesn't seem to handle being passed an empty credential object (`[PsCredential]::Empty`) correctly. The fix for this error was to not pass `Start-Job` the empty credential object:
 
 ```posh
 $job = @{
@@ -51,5 +51,7 @@ If ($Result.Credential -ne [PsCredential]::Empty) {
 
 $Jobs = Start-Job @job
 ```
+
+A quick test on my workstation shows that this issue is resolved in PowerShell 5.
 
 ---tjm
