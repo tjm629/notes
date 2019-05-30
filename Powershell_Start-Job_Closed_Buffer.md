@@ -1,10 +1,8 @@
 # Powershell Start-Job error - closed buffer
 
+Error message:
+
 ```Objects cannot be added to a closed buffer. Make sure the buffer is open for Add and Insert operations to succeed.```
-
-Solved this one after not finding anything else on the web for this particular cmdlet + error.
-
-**Background:**
 
 I was working on a script that would pass the `PSRemotingJob`(s) on to another cmdlet.
 
@@ -35,9 +33,9 @@ $job = @{
 
 That's when I started to get the above error (`Objects cannot be added to a closed buffer...`).
 
-One thing I've learned while implementing `-Credential` parameters into our corporate PowerShell modules is that the Microsoft-provided cmdlets handle credentials in an inconsitent manner. (h/t [@joshduffney](http://duffney.io/AddCredentialsToPowerShellFunctions)).
+I've learned that the Microsoft-provided cmdlets handle credentials in an inconsitent manner while implementing `-Credential` parameters into our corporate PowerShell modules.<sup>[1]</sup>
 
-`Start-Job` in Powershell 4 doesn't seem to handle being passed an empty credential object (`[PsCredential]::Empty`) correctly. The fix for this error was to not pass `Start-Job` the empty credential object:
+`Start-Job` in Powershell 4<sup>[2]</sup> doesn't seem to handle being passed an empty credential object (`[PsCredential]::Empty`) correctly. The fix for this error was to not pass `Start-Job` the empty credential object:
 
 ```posh
 $job = @{
@@ -52,6 +50,8 @@ If ($Result.Credential -ne [PsCredential]::Empty) {
 $Jobs = Start-Job @job
 ```
 
-A quick test on my workstation shows that this issue is resolved in PowerShell 5.
+*<sup>[1]</sup> [@duffney](https://github.com/duffney) has a very helpful post '[How to Add Credential Parameters to PowerShell Functions](http://duffney.io/AddCredentialsToPowerShellFunctions)'.*
+
+*<sup>[2]</sup> A quick test on my workstation shows that this issue is resolved in PowerShell 5.*
 
 ---tjm
